@@ -1,8 +1,12 @@
 require 'hmac-sha1' # on OS X: sudo gem install ruby-hmac
 require 'net/https'
+require 'net/http'
+require 'uri'
 require 'base64'
+require 'right_aws'
 
-module Publish2Cloud 
+module Publish2Cloud
+ 
 	class Publisher
 
 		def initialize s3_access, s3_secret, s3_bucket, cf_distribution
@@ -10,6 +14,7 @@ module Publish2Cloud
 		  @s3_secret = s3_secret
 		  @s3_bucket = s3_bucket
 		  @cf_distribution = cf_distribution
+		  ensure_s3_bucket_exist
 		end
 
 		#http://aws.amazon.com/cloudfront/faqs/#How_long_will_Amazon_CloudFront_keep_my_files
@@ -24,7 +29,7 @@ module Publish2Cloud
 		  raise res.code if res.code != '200'
 		  #puts res.body
 
-		  s3= RightAws::S3.new(@s3_access, @s3_secrets)
+		  s3= RightAws::S3.new(@s3_access, @s3_secret)
 		  bucket = s3.bucket(@s3_bucket)
 		  bucket.put(s3key, res.body, {}, 'public-read', headers)
 		  
@@ -111,7 +116,7 @@ module Publish2Cloud
 			req.initialize_http_header({
 				'x-amz-date' => date,
 				'Content-Type' => 'text/xml',
-				'Authorization' => "AWS %s:%s" % [s3_access, Base64.encode64(digest.digest)],
+				'Authorization' => "AWS %s:%s" % [@s3_access, Base64.encode64(digest.digest)],
 				'If-Match' => etag
 			})
 
@@ -134,5 +139,18 @@ module Publish2Cloud
 			puts res.body
 			return 0
 		end
+		
+		def ensure_s3_bucket_exist
+		  s3= RightAws::S3.new(@s3_access, @s3_secret, {:logger => Logger.new('log/publish2cloud.log')})
+		  bucket = s3.bucket(@s3_bucket)
+		  begin
+		    bucket.keys
+		    puts "Bucket '#{@s3_bucket}' exists"
+		  rescue
+		    puts "Going to creat '#{@s3_bucket}'"
+		    RightAws::S3::Bucket.create(s3, @s3_bucket, true, 'public-read')
+		  end
+		end
+		
 	end
 end

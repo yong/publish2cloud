@@ -9,4 +9,6 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*.rb'] + Dir['lib/**/*.rake']
   s.summary = %q{publish2cloud}
   s.add_dependency(%q<ruby-hmac>)
+  s.add_dependency(%q<right_aws>)
+  s.add_dependency(%q<nokogiri>)
 end
