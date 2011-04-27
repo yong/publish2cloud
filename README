@@ -3,6 +3,13 @@ You have a running rails application, but some of the content does not change of
 
 Publish2Cloud is a ruby gem that help you to move the content to the cloud (Amazon's cloudfront cdn service). It does NOT encourge/force you to write static html like the old days, you will keep your database driven rails site running. But if the rendered content does not change often, this gem can grap the content from your site and push them on the cloudfront, along with some DNS help, those content will be served faster and more reliability.
 
+==What it does==
+Assuming your site is running at 'www.company.com', and you enabled cloudfront on bucket 'company-cdn'  and assigned a CNAME 'cdn.company.com'. And on 'www.company.com', there are some contents that rarely changes, for example:
+http://www.company.com/contract
+
+You can use publish2Cloud's rake task to fecth 'http://www.company.com/contract', and upload it to 'company-cdn', and invalidate the original one from the cloud if already exists, so that you can have the content at:
+http://cdn.company.com/contract
+
 ==Install==
 gem install publish2cloud
 
