@@ -1,0 +1,30 @@
+==What it is for==
+You have a running rails application, but some of the content does not change often (company homepage, marketing site etc). And you are thinking about taking advantage of Amazon's cloudfront service for better speed and reliability.
+
+Publish2Cloud is a ruby gem that help you to move the content to the cloud (Amazon's cloudfront cdn service). It does NOT encourge you to write static html like the old days, you will keep your database driven rails site running. But if the rendered content does not change often, this gem can grap the content from your site and push them on the cloudfront, along with some DNS help, those content will be served faster and more reliability. 
+
+==Install==
+gem install publish2cloud
+
+With Rails 3, add this line into Gemfile
+group :development do
+  gem 'publish2cloud'
+end
+
+
+==Usage==
+You need a amazon aws account, and enable s3 and cloudfront service.
+
+Create config/publish2cloud.rb in your rails projects, and make it look like this:
+P2C_S3_ACCESS_KEY_ID=''
+P2C_S3_SECRET_ACCESS_KEY=''
+P2C_S3_BUCKET=''
+#Optional
+#P2C_MAX_AGE=86400
+#This is not one in .cloudfront.net url
+P2C_CF_DISTRIBUTION_ID=''
+#This file a just a ruby program, feel free modify P2C_URLS with code
+P2C_URLS=['', '']
+
+Run it:
+rake p2c:push
