@@ -1,7 +1,7 @@
 ==What it is for==
 You have a running rails application, but some of the content does not change often (company homepage, marketing site etc). And you are thinking about taking advantage of Amazon's cloudfront service for better speed and reliability.
 
-Publish2Cloud is a ruby gem that help you to move the content to the cloud (Amazon's cloudfront cdn service). It does NOT encourge you to write static html like the old days, you will keep your database driven rails site running. But if the rendered content does not change often, this gem can grap the content from your site and push them on the cloudfront, along with some DNS help, those content will be served faster and more reliability. 
+Publish2Cloud is a ruby gem that help you to move the content to the cloud (Amazon's cloudfront cdn service). It does NOT encourge/force you to write static html like the old days, you will keep your database driven rails site running. But if the rendered content does not change often, this gem can grap the content from your site and push them on the cloudfront, along with some DNS help, those content will be served faster and more reliability.
 
 ==Install==
 gem install publish2cloud
@@ -10,7 +10,6 @@ With Rails 3, add this line into Gemfile
 group :development do
   gem 'publish2cloud'
 end
-
 
 ==Usage==
 You need a amazon aws account, and enable s3 and cloudfront service.
@@ -28,3 +27,16 @@ P2C_URLS=['', '']
 
 Run it:
 rake p2c:push
+
+In the future, you will need to run 'rake p2c:push' each time when the cached content changes (new deployment, data being updated in database etc).
+
+==Thanks and Credits==
+I used some code of jmlacroix, and his original post is at:
+http://jmlacroix.com/archives/cloudfront-hosting.html
+http://jmlacroix.com/archives/cloudfront-publishing.html
+
+I also used heroku_san's code as a reference to add rake task into a gem:
+https://github.com/fastestforward/heroku_san
+
+==License==
+Copyright 2011 Intridea Inc ( http://intridea.com ), released under the MIT license.
