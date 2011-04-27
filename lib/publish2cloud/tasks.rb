@@ -16,7 +16,7 @@ namespace :p2c do
   end
   
   desc "Analyze links of a given webpage"
-  task :analyze do
-    p ARGV
+  task :analyze, :url do |t, args|
+    Publish2Cloud::Analyzer.new.run args[:url]
   end
 end

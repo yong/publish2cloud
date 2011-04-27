@@ -5,7 +5,19 @@ require 'uri'
 require 'base64'
 require 'right_aws'
 
+require 'open-uri'
+require 'nokogiri'
+
 module Publish2Cloud
+ 
+  class Analyzer
+    def run url
+		  doc = Nokogiri::HTML(open(url))
+			doc.css('a').each { |node|
+			  puts node['href']
+			}
+		end
+  end
  
 	class Publisher
 
